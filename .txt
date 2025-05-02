@@ -1,0 +1,7 @@
+python: 
+pip install pydantic-settings
+pip install selenium
+pip install webdriver-manager
+pip install openai
+pip install fastapi 
+pip install uvicorn
