@@ -212,9 +212,9 @@ const PageSpeedReport = ({ data }) => {
                 .map((audit, index) => (
                   <div key={index} className="border-l-4 border-yellow-600 bg-yellow-900 bg-opacity-30 p-3 rounded-r">
                     <h3 className="font-medium text-sm md:text-base text-yellow-100">{audit.title}</h3>
-                    <p className="text-xs md:text-sm text-gray-300 mt-1">{audit.description}</p>
+                    <p className="text-xs md:text-sm text-gray-300 mt-1 whitespace-normal">{audit.description}</p>
                     {audit.displayValue && (
-                      <p className="text-xs md:text-sm mt-1 font-medium text-yellow-100">{audit.displayValue}</p>
+                      <p className="text-xs md:text-sm mt-1 font-medium text-yellow-100 whitespace-normal">{audit.displayValue}</p>
                     )}
                   </div>
                 ))}
