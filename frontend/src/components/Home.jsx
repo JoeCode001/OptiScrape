@@ -258,7 +258,7 @@ const OptiScrapeHome = () => {
                                                 onChange={handleCheckChange}
                                                 className="form-checkbox h-5 w-5 text-[#FF7B25] rounded focus:ring-[#FF7B25] border-gray-600 bg-gray-700"
                                             />
-                                            <span className="ml-2 text-gray-300">SEO Analyzer</span>
+                                            <span className="ml-2 text-gray-300 text-[14px] whitespace-nowrap">SEO Analyzer</span>
                                         </label>
                                         <label className="inline-flex items-center">
                                             <input
@@ -268,7 +268,7 @@ const OptiScrapeHome = () => {
                                                 onChange={handleCheckChange}
                                                 className="form-checkbox h-5 w-5 text-[#FF7B25] rounded focus:ring-[#FF7B25] border-gray-600 bg-gray-700"
                                             />
-                                            <span className="ml-2 text-gray-300">Page Speed Check</span>
+                                            <span className="ml-2 text-[14px] whitespace-nowrap text-gray-300">Page Speed Check</span>
                                         </label>
                                     </div>
                                 </div>
