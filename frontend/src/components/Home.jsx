@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaRobot, FaChartLine, FaSearch, FaToolbox, FaTimes } from 'react-icons/fa';
-// import Result from './Result';
 import axios from 'axios';
 import PageSpeedReport from './PageSpeedResult';
+import Result from './SeoAnalyzer';
 
 const OptiScrapeHome = () => {
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -16,7 +16,8 @@ const OptiScrapeHome = () => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [result, setResult] = useState(null);
+    const [seo, setSeo] = useState(null);
+    const [pageSpeed, setPageSpeed] = useState(null);
 
     const features = [
         {
@@ -32,8 +33,6 @@ const OptiScrapeHome = () => {
             title: "Deep Analysis",
         }
     ];
-    const[seo, setSeo] = useState({})
-    const[pageSpeed, setPageSpeed] = useState({})
 
     const headlines = [
         { first: "Optimize Your", second: "Website SEO" },
@@ -78,17 +77,16 @@ const OptiScrapeHome = () => {
 
         setLoading(true);
         setError(null);
+        setSeo(null);
+        setPageSpeed(null);
 
         try {
-            let responses = {};
-
             if (checks.seoAnalyzer) {
                 const seoResponse = await axios.get(`http://localhost:8000/analyze`, {
                     params: { url },
                     headers: { 'Content-Type': 'application/json' }
                 });
-                responses.seo = seoResponse.data;
-                setSeo( responses.seo)
+                setSeo(seoResponse.data);
             }
 
             if (checks.pageSpeed) {
@@ -96,11 +94,9 @@ const OptiScrapeHome = () => {
                     params: { url },
                     headers: { 'Content-Type': 'application/json' }
                 });
-                responses.pageSpeed = speedResponse.data;
-                setPageSpeed(responses.pageSpeed)
+                setPageSpeed(speedResponse.data);
             }
 
-            setResult(responses);
             setIsModalOpen(false);
         } catch (err) {
             setError(err.response?.data?.detail || "Failed to analyze URL");
@@ -110,7 +106,7 @@ const OptiScrapeHome = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-6 relative">
+        <div className="min-h-screen bg-gray-950 flex flex-col items-center p-6 relative">
             {/* Main Content */}
             <div className="max-w-6xl w-full text-center">
                 {/* Features Badge */}
@@ -303,14 +299,36 @@ const OptiScrapeHome = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-            {pageSpeed  !== null? (
-             <div className='w-full overflow-hidden mt-[5rem]'>
-                <PageSpeedReport data={pageSpeed} />
-             </div>
-            ): (
-                <div></div>
-            )}
 
+            {/* Results Section */}
+            <div className="w-full  mt-8 space-y-8">
+                {loading && (
+                    <div className="flex justify-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF7B25]"></div>
+                    </div>
+                )}
+
+                {pageSpeed && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-full overflow-hidden"
+                    >
+                        <PageSpeedReport data={pageSpeed} />
+                    </motion.div>
+                )}
+
+                {seo && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                        <Result seoAnalyzerResult={seo} />
+                    </motion.div>
+                )}
+            </div>
         </div>
     );
 };
