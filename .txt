@@ -5,3 +5,4 @@ pip install webdriver-manager
 pip install openai
 pip install fastapi 
 pip install uvicorn
+pip install aiohttp
