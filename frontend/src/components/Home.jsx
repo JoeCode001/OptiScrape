@@ -304,7 +304,9 @@ const OptiScrapeHome = () => {
                 )}
             </AnimatePresence>
             {pageSpeed  !== null? (
-             <PageSpeedReport data={pageSpeed} />
+             <div className='w-full overflow-hidden mt-[5rem]'>
+                <PageSpeedReport data={pageSpeed} />
+             </div>
             ): (
                 <div></div>
             )}
