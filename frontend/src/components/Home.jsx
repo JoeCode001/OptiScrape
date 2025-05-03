@@ -166,7 +166,7 @@ const OptiScrapeHome = () => {
                     transition={{ delay: 0.8, duration: 0.8 }}
                     className="mt-8 flex flex-col gap-6 items-center"
                 >
-                    <motion.p className="text-lg md:text-xl text-gray-400 mb-8 ">
+                    <motion.p className="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto ">
                         Gain competitive advantage with intelligent SEO recommendations tailored to your website's unique architecture and content profile.
                     </motion.p>
 
