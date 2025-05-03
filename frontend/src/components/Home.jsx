@@ -84,7 +84,11 @@ const OptiScrapeHome = () => {
             if (checks.seoAnalyzer) {
                 const seoResponse = await axios.get(`https://6402-102-90-45-106.ngrok-free.app/analyze`, {
                     params: { url },
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning
+                        'Access-Control-Allow-Origin': '*' // For CORS }
+                    }
                 });
                 setSeo(seoResponse.data);
             }
@@ -92,7 +96,11 @@ const OptiScrapeHome = () => {
             if (checks.pageSpeed) {
                 const speedResponse = await axios.get(`https://6402-102-90-45-106.ngrok-free.app/pagespeed`, {
                     params: { url },
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true', // Bypass ngrok warning
+                        'Access-Control-Allow-Origin': '*' // For CORS }
+                    }
                 });
                 setPageSpeed(speedResponse.data);
             }
