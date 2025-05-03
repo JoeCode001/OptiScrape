@@ -1,7 +1,7 @@
 import React from 'react';
 
 const MetaTagCard = ({ title, tags }) => (
-  <div className="bg-gray-800 rounded-lg shadow md:w-full w-[8cm] p-4 mb-4 border border-gray-700">
+  <div className="bg-gray-800 rounded-lg shadow md:w-full w-[7cm] p-4 mb-4 border border-gray-700">
     <h3 className="text-lg font-semibold mb-2 text-[#FF7B25]">{title}</h3>
     {tags && tags.length > 0 ? (
       <ul className="space-y-2">
