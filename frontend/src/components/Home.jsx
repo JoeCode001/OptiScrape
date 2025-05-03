@@ -139,7 +139,7 @@ const OptiScrapeHome = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="text-5xl md:text-7xl font-bold text-white"
+                            className="text-4xl md:text-7xl font-bold text-white"
                         >
                             {headlines[currentTextIndex].first}
                         </motion.div>
@@ -152,7 +152,7 @@ const OptiScrapeHome = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-5xl md:text-7xl font-bold text-[#FF7B25] mt-2"
+                            className="text-4xl md:text-7xl font-bold text-[#FF7B25] mt-2"
                         >
                             {headlines[currentTextIndex].second}
                         </motion.div>
