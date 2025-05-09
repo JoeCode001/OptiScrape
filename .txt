@@ -6,3 +6,7 @@ pip install openai
 pip install fastapi 
 pip install uvicorn
 pip install aiohttp
+
+you first instsl venv file then activate it aafter that you can install any python library you want to use then when your are done with
+the project you will do this "pip freeze > requirements.txt" to save all installed packege used
+pip install selenium webdriver-manager flask openai fastapi uvicorn aiohttp pydantic-settings
