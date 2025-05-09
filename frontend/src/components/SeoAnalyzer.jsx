@@ -1,14 +1,14 @@
 import React from 'react';
 
 const MetaTagCard = ({ title, tags }) => (
-  <div className="bg-gray-800 rounded-lg shadow md:w-full w-[7cm] p-4 mb-4 border border-gray-700">
+  <div className="bg-gray-800 rounded-lg shadow w-full p-4 mb-4 border border-gray-700 min-w-0 overflow-hidden">
     <h3 className="text-lg font-semibold mb-2 text-[#FF7B25]">{title}</h3>
     {tags && tags.length > 0 ? (
       <ul className="space-y-2">
         {tags.map((tag, index) => (
-          <li key={index} className="border-b border-gray-700 pb-2 last:border-0">
-            <p className="font-medium text-gray-400">{tag.name || tag.property}:</p>
-            <p className="text-gray-300 break-words">{tag.content}</p>
+          <li key={index} className="border-b border-gray-700 pb-2 last:border-0 break-words">
+            <p className="font-medium text-gray-400 truncate whitespace-normal">{tag.name || tag.property}:</p>
+            <p className="text-gray-300 break-words whitespace-normal">{tag.content}</p>
           </li>
         ))}
       </ul>
@@ -18,66 +18,101 @@ const MetaTagCard = ({ title, tags }) => (
   </div>
 );
 
-const PreviewCard = ({ previewData }) => {
-  const og = previewData?.og_data || {};
-  const twitter = previewData?.twitter_data || {};
+const PreviewCard = ({ previewData, metaTags }) => {
+  const twitterTags = metaTags?.twitter || previewData?.twitter_data || [];
   
-  // Determine which set of data to use for the preview (OG first, then Twitter, then fallbacks)
-  const title = og['og:title'] || twitter['twitter:title'] || previewData?.title || 'Untitled';
-  const description = og['og:description'] || twitter['twitter:description'] || previewData?.meta_description || 'No description available';
-  const image = og['og:image'] || twitter['twitter:image'] || '';
+  const twitterData = twitterTags.reduce((acc, tag) => {
+    const key = tag.property || tag.name;
+    if (key && tag.content) {
+      acc[key] = tag.content;
+    }
+    return acc;
+  }, {});
+
+  const og = previewData?.og_data || {};
+  
+  const title = twitterData['twitter:title'] || og['og:title'] || previewData?.title || 'Untitled';
+  const description = twitterData['twitter:description'] || og['og:description'] || previewData?.meta_description || 'No description available';
+  const image = twitterData['twitter:image'] || og['og:image'] || '';
   const url = og['og:url'] || previewData?.url || '';
+  const displayUrl = url ? new URL(url).hostname.replace('www.', '') : 'example.com';
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow p-6 border border-gray-700 mb-6">
+    <div className="bg-gray-800 rounded-lg shadow p-4 sm:p-6 border border-gray-700 mb-6 max-w-full overflow-hidden">
       <h2 className="text-xl font-semibold text-[#FF7B25] mb-4">Social Media Preview</h2>
       
       <div className="mb-6">
         <h3 className="text-lg font-medium text-gray-300 mb-2">How your link will appear when shared:</h3>
-        <div className="max-w-lg border border-gray-600 rounded-lg overflow-hidden bg-white text-gray-800">
+        <div className="max-w-lg w-full border border-gray-600 rounded-lg overflow-hidden bg-gray-900">
           {image && (
-            <div className="h-48 bg-gray-200 overflow-hidden">
+            <div className="h-48 bg-gray-700 overflow-hidden relative">
               <img 
                 src={image} 
                 alt="Preview" 
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.onerror = null; 
-                  e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVlZWVlIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OSI+Tm8gSW1hZ2UgQXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
+                  e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2NjYyI+Tm8gSW1hZ2UgQXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
                 }}
               />
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-gray-900 to-transparent"></div>
             </div>
           )}
           <div className="p-4">
-            <div className="text-xs text-blue-600 mb-1 truncate">{url}</div>
-            <h4 className="text-lg font-bold mb-1 line-clamp-2">{title}</h4>
-            <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+            <div className="text-xs text-[#FF7B25] uppercase tracking-wider mb-1 truncate">{displayUrl}</div>
+            <h4 className="text-lg text-white font-bold mb-1 line-clamp-2">{title}</h4>
+            <p className="text-sm text-gray-300 line-clamp-2 mb-2">{description}</p>
+            <div className="flex items-center">
+              <div className="w-6 h-6 rounded-full bg-[#FF7B25] flex items-center justify-center mr-2">
+                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                </svg>
+              </div>
+              <span className="text-xs text-gray-400 truncate">via YourSite</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <h3 className="text-lg font-medium text-gray-300 mb-2">OpenGraph Data</h3>
-          <ul className="space-y-1">
-            {Object.entries(og).map(([key, value]) => (
-              <li key={key} className="flex">
-                <span className="text-gray-400 font-medium w-32 truncate">{key}:</span>
-                <span className="text-gray-300 flex-1 truncate" title={value}>{value || 'Not set'}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="bg-gray-700 rounded-lg p-3 max-w-full overflow-hidden">
+            <ul className="space-y-2">
+              {Object.entries(og).map(([key, value]) => (
+                <li key={key} className="flex items-start min-w-0">
+                  <span className="text-gray-400 font-medium text-sm w-28 flex-shrink-0 truncate">{key}:</span>
+                  <span 
+                    className={`text-sm break-words min-w-0 ${value ? 'text-gray-300' : 'text-gray-500 italic'}`}
+                    title={value}
+                  >
+                    {value || 'Not set'}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div>
           <h3 className="text-lg font-medium text-gray-300 mb-2">Twitter Card Data</h3>
-          <ul className="space-y-1">
-            {Object.entries(twitter).map(([key, value]) => (
-              <li key={key} className="flex">
-                <span className="text-gray-400 font-medium w-32 truncate">{key}:</span>
-                <span className="text-gray-300 flex-1 truncate" title={value}>{value || 'Not set'}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="bg-gray-700 rounded-lg p-4 max-w-full overflow-hidden">
+            {twitterTags.length > 0 ? (
+              <ul className="space-y-2">
+                {twitterTags.map((tag, index) => (
+                  <li key={index} className="flex min-w-0 whitespace-normal">
+                    <span className="text-gray-400 font-medium w-40 flex-shrink-0 truncate whitespace-normal">
+                      {tag.property || tag.name}:
+                    </span>
+                    <span className="text-gray-300 flex-1 break-words">
+                      {tag.content}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 italic">No Twitter card tags found</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -118,18 +153,19 @@ function Result({ seoAnalyzerResult }) {
   }
 
   return (
-    <div className="w-full mx-auto overflow-hidden">
-      <div className="bg-gray-900 rounded-lg shadow-lg p-6 border border-gray-800">
+    <div className="w-full mx-auto px-4 sm:px-6">
+      <div className="bg-gray-900 rounded-lg shadow-lg p-4 sm:p-6 border border-gray-800 max-w-full overflow-x-hidden">
         <h1 className="text-2xl font-bold text-gray-300 mb-6">SEO Meta Results</h1>
 
         <div className="space-y-6">
-          {/* Social Media Preview Section */}
           {seoAnalyzerResult.current_data?.preview_data && (
-            <PreviewCard previewData={seoAnalyzerResult.current_data.preview_data} />
+            <PreviewCard 
+              previewData={seoAnalyzerResult.current_data.preview_data} 
+              metaTags={seoAnalyzerResult.current_data?.meta_tags} 
+            />
           )}
 
-          {/* Meta Tags Grid */}
-          <div className="w-full grid md:grid-cols-2 gap-4 relative">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             <MetaTagCard 
               title="Standard Tags" 
               tags={seoAnalyzerResult.current_data?.meta_tags?.standard || []} 
@@ -148,8 +184,7 @@ function Result({ seoAnalyzerResult }) {
             />
           </div>
 
-          {/* SEO Analysis Section */}
-          <div className="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+          <div className="bg-gray-800 rounded-lg shadow p-4 sm:p-6 border border-gray-700">
             <h2 className="text-xl font-semibold text-[#FF7B25] mb-4">SEO Analysis</h2>
             <div className="mb-4">
               <div className="flex items-center justify-between mb-1">
@@ -200,12 +235,11 @@ function Result({ seoAnalyzerResult }) {
             )}
           </div>
 
-          {/* Suggested Improvements Section */}
           {seoAnalyzerResult.analysis?.improvements ? (
-            <div className="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">
+            <div className="bg-gray-800 rounded-lg shadow p-4 sm:p-6 border border-gray-700">
               <h2 className="text-xl font-semibold text-[#FF7B25] mb-4">Suggested Improvements</h2>
 
-              {seoAnalyzerResult.analysis.improvements.title ? (
+              {seoAnalyzerResult.analysis.improvements.title && (
                 <div className="mb-4">
                   <h3 className="text-lg font-medium text-[#FF7B25] mb-2">Title</h3>
                   <div className="bg-gray-700 p-4 rounded-lg border border-gray-600">
@@ -215,35 +249,49 @@ function Result({ seoAnalyzerResult }) {
                     <p className="text-gray-300">{seoAnalyzerResult.analysis.improvements.title}</p>
                   </div>
                 </div>
-              ) : null}
+              )}
 
-              {seoAnalyzerResult.analysis.improvements.standard?.length > 0 ? (
+              {seoAnalyzerResult.analysis.improvements.standard?.length > 0 && (
                 <div className="mb-4">
                   <h3 className="text-lg font-medium text-[#FF7B25] mb-2">Standard Meta Tags</h3>
                   <div className="space-y-3">
                     {seoAnalyzerResult.analysis.improvements.standard.map((tag, i) => (
-                      <div key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600 relative">
+                      <div key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
                         <p className="text-gray-400 font-medium">{tag.name}:</p>
-                        <p className="text-gray-300">{tag.content}</p>
+                        <p className="text-gray-300 break-words">{tag.content}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-              ) : null}
+              )}
 
-              {seoAnalyzerResult.analysis.improvements.opengraph?.length > 0 ? (
-                <div>
+              {seoAnalyzerResult.analysis.improvements.opengraph?.length > 0 && (
+                <div className="mb-4">
                   <h3 className="text-lg font-medium text-[#FF7B25] mb-2">OpenGraph Tags</h3>
                   <div className="space-y-3">
                     {seoAnalyzerResult.analysis.improvements.opengraph.map((tag, i) => (
-                     <div key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600 min-w-0">
-                     <p className="text-gray-400 font-medium truncate">{tag.property}:</p>
-                     <p className="text-gray-300 break-words whitespace-normal">{tag.content}</p>
-                   </div>
+                      <div key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                        <p className="text-gray-400 font-medium truncate">{tag.property}:</p>
+                        <p className="text-gray-300 break-words whitespace-normal">{tag.content}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
-              ) : null}
+              )}
+
+              {seoAnalyzerResult.analysis.improvements.twitter?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium text-[#FF7B25] mb-2">Twitter Tags</h3>
+                  <div className="space-y-3">
+                    {seoAnalyzerResult.analysis.improvements.twitter.map((tag, i) => (
+                      <div key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                        <p className="text-gray-400 font-medium truncate">{tag.name}:</p>
+                        <p className="text-gray-300 break-words whitespace-normal">{tag.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="bg-gray-800 rounded-lg shadow p-6 border border-gray-700">

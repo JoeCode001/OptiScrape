@@ -16,22 +16,38 @@ def extract_json(text: str):
 
 def generate_preview_data(scraped_data: dict, categorized: dict) -> dict:
     """Generate debugger-style preview data similar to Facebook's Sharing Debugger."""
+    def find_tag_content(tags, target_name=None, target_property=None):
+        if not tags:
+            return ""
+        for tag in tags:
+            if not isinstance(tag, dict):
+                continue
+            if target_name and tag.get('name') == target_name:
+                return tag.get('content', '')
+            if target_property and tag.get('property') == target_property:
+                return tag.get('content', '')
+        return ""
+
+    standard_tags = categorized.get("standard", [])
+    og_tags = categorized.get("opengraph", [])
+    twitter_tags = categorized.get("twitter", [])
+
     preview = {
         "url": scraped_data.get("url", ""),
         "title": scraped_data.get("title", ""),
-        "meta_description": categorized.get("standard", {}).get("description", {}).get("content", ""),
+        "meta_description": find_tag_content(standard_tags, target_name="description"),
         "og_data": {
-            "og:title": categorized.get("opengraph", {}).get("og:title", {}).get("content", ""),
-            "og:description": categorized.get("opengraph", {}).get("og:description", {}).get("content", ""),
-            "og:image": categorized.get("opengraph", {}).get("og:image", {}).get("content", ""),
-            "og:url": categorized.get("opengraph", {}).get("og:url", {}).get("content", ""),
-            "og:type": categorized.get("opengraph", {}).get("og:type", {}).get("content", ""),
+            "og:title": find_tag_content(og_tags, target_property="og:title"),
+            "og:description": find_tag_content(og_tags, target_property="og:description"),
+            "og:image": find_tag_content(og_tags, target_property="og:image"),
+            "og:url": find_tag_content(og_tags, target_property="og:url"),
+            "og:type": find_tag_content(og_tags, target_property="og:type"),
         },
         "twitter_data": {
-            "twitter:title": categorized.get("twitter", {}).get("twitter:title", {}).get("content", ""),
-            "twitter:description": categorized.get("twitter", {}).get("twitter:description", {}).get("content", ""),
-            "twitter:image": categorized.get("twitter", {}).get("twitter:image", {}).get("content", ""),
-            "twitter:card": categorized.get("twitter", {}).get("twitter:card", {}).get("content", ""),
+            "twitter:title": find_tag_content(twitter_tags, target_property="twitter:title"),
+            "twitter:description": find_tag_content(twitter_tags, target_property="twitter:description"),
+            "twitter:image": find_tag_content(twitter_tags, target_property="twitter:image"),
+            "twitter:card": find_tag_content(twitter_tags, target_property="twitter:card"),
         },
         "warnings": [],
         "notices": []

@@ -76,22 +76,37 @@ def categorize_meta_tags(meta_tags):
         "twitter": [],
         "other": []
     }
+    
     for tag in meta_tags:
-        if not any(tag.values()):
+        if not tag or not any(tag.values()):
             continue
-        prop = tag.get('property') or ''
-        name = tag.get('name') or ''
-        http_equiv = tag.get('http_equiv') or ''
-        if prop.startswith('og:'):
-            categories["opengraph"].append(tag)
-        elif prop.startswith('twitter:'):
+            
+        # Safely get attributes with None checks
+        name = tag.get('name')
+        prop = tag.get('property')
+        http_equiv = tag.get('http_equiv')
+        
+        # Convert to lowercase strings if they exist, otherwise empty string
+        name_lower = name.lower() if name else ''
+        prop_lower = prop.lower() if prop else ''
+        http_equiv_lower = http_equiv.lower() if http_equiv else ''
+
+        # Check for Twitter cards (name or property)
+        if (name_lower.startswith('twitter:') or 
+            prop_lower.startswith('twitter:')):
             categories["twitter"].append(tag)
-        elif name or http_equiv:
+        # Check for OpenGraph (typically property)
+        elif prop_lower.startswith('og:'):
+            categories["opengraph"].append(tag)
+        # Standard meta tags
+        elif (name_lower in {'description', 'keywords', 'author', 'viewport', 
+                            'theme-color', 'robots'} or 
+              http_equiv_lower):
             categories["standard"].append(tag)
         else:
             categories["other"].append(tag)
+            
     return categories
-
 # Routes
 @app.get("/analyze")
 async def analyze_seo(url: str = Query(..., description="URL to analyze (include http/https)")):
