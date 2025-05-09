@@ -82,7 +82,7 @@ const OptiScrapeHome = () => {
 
         try {
             if (checks.seoAnalyzer) {
-                const seoResponse = await axios.get(`https://6402-102-90-45-106.ngrok-free.app/analyze`, {
+                const seoResponse = await axios.get(`https://optiscrape.onrender.com/analyze`, {
                     params: { url },
                     headers: {
                         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ const OptiScrapeHome = () => {
             }
 
             if (checks.pageSpeed) {
-                const speedResponse = await axios.get(`https://6402-102-90-45-106.ngrok-free.app/pagespeed`, {
+                const speedResponse = await axios.get(`https://optiscrape.onrender.com/pagespeed`, {
                     params: { url },
                     headers: {
                         'Content-Type': 'application/json',
