@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 from seo_analyzer import analyze_meta_tags_with_openai
 from pagespeed_checker import run_pagespeed
+from seo_analyzer import generate_preview_data
 
 load_dotenv()
 
@@ -100,6 +101,8 @@ async def analyze_seo(url: str = Query(..., description="URL to analyze (include
     try:
         scraped_data = scrape_all_meta_tags(url)
         categorized = categorize_meta_tags(scraped_data["meta_tags"])
+        # Generate debugger-style preview data
+        preview_data = generate_preview_data(scraped_data, categorized)
 
         ai_data = await analyze_meta_tags_with_openai(
             url,
