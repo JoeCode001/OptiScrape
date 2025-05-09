@@ -112,7 +112,8 @@ async def analyze_seo(url: str = Query(..., description="URL to analyze (include
             "url": url,
             "current_data": {
                 "title": scraped_data["title"],
-                "meta_tags": categorized
+                "meta_tags": categorized,
+                "preview_data": preview_data
             },
             "analysis": ai_data
         }
