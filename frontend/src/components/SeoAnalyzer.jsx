@@ -153,8 +153,8 @@ function Result({ seoAnalyzerResult }) {
   }
 
   return (
-    <div className="w-full mx-auto px-4 sm:px-6">
-      <div className="bg-gray-900 rounded-lg shadow-lg p-4 sm:p-6 border border-gray-800 max-w-full overflow-x-hidden">
+    <div className="w-full mx-auto px-1 sm:px-1">
+      <div className="bg-gray-900 rounded-lg shadow-lg p-2 sm:p-2 border border-gray-800 max-w-full overflow-x-hidden">
         <h1 className="text-2xl font-bold text-gray-300 mb-6">SEO Meta Results</h1>
 
         <div className="space-y-6">

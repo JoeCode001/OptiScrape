@@ -114,7 +114,7 @@ const OptiScrapeHome = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-950 flex flex-col items-center p-6 relative">
+        <div className="min-h-screen bg-gray-950 flex flex-col items-center p-3 md:p-6 relative">
             {/* Main Content */}
             <div className="max-w-6xl w-full text-center">
                 {/* Features Badge */}
