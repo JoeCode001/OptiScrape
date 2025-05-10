@@ -77,22 +77,25 @@ const PreviewCard = ({ previewData, metaTags }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <h3 className="text-lg font-medium text-gray-300 mb-2">OpenGraph Data</h3>
-          <div className="bg-gray-700 rounded-lg p-3 max-w-full overflow-hidden">
-            <ul className="space-y-2">
+          <div className="bg-gray-700 rounded-lg p-3 w-full overflow-x-auto">
+            <div className="space-y-3">
               {Object.entries(og).map(([key, value]) => (
-                <li key={key} className="flex items-start min-w-0">
-                  <span className="text-gray-400 font-medium text-sm w-28 flex-shrink-0 truncate">{key}:</span>
-                  <span
+                <div key={key} className="flex flex-col sm:flex-row sm:items-start sm:gap-4 min-w-0">
+                  <div className="text-gray-400 font-medium text-sm w-full sm:w-28 flex-shrink-0 break-words">
+                    {key}:
+                  </div>
+                  <div
                     className={`text-sm break-words min-w-0 ${value ? 'text-gray-300' : 'text-gray-500 italic'}`}
                     title={value}
                   >
                     {value || 'Not set'}
-                  </span>
-                </li>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
+
         <div>
           <h3 className="text-lg font-medium text-gray-300 mb-2">Twitter Card Data</h3>
           <div className="bg-gray-700 rounded-lg p-4 w-full overflow-x-auto">
@@ -197,10 +200,10 @@ function Result({ seoAnalyzerResult }) {
               <div className="w-full bg-gray-700 rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full ${(seoAnalyzerResult.analysis?.performance_score || 0) >= 70
-                      ? 'bg-green-500'
-                      : (seoAnalyzerResult.analysis?.performance_score || 0) >= 40
-                        ? 'bg-yellow-500'
-                        : 'bg-red-500'
+                    ? 'bg-green-500'
+                    : (seoAnalyzerResult.analysis?.performance_score || 0) >= 40
+                      ? 'bg-yellow-500'
+                      : 'bg-red-500'
                     }`}
                   style={{ width: `${seoAnalyzerResult.analysis?.performance_score || 0}%` }}
                 ></div>
