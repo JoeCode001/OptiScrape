@@ -20,7 +20,7 @@ const MetaTagCard = ({ title, tags }) => (
 
 const PreviewCard = ({ previewData, metaTags }) => {
   const twitterTags = metaTags?.twitter || previewData?.twitter_data || [];
-  
+
   const twitterData = twitterTags.reduce((acc, tag) => {
     const key = tag.property || tag.name;
     if (key && tag.content) {
@@ -30,7 +30,7 @@ const PreviewCard = ({ previewData, metaTags }) => {
   }, {});
 
   const og = previewData?.og_data || {};
-  
+
   const title = twitterData['twitter:title'] || og['og:title'] || previewData?.title || 'Untitled';
   const description = twitterData['twitter:description'] || og['og:description'] || previewData?.meta_description || 'No description available';
   const image = twitterData['twitter:image'] || og['og:image'] || '';
@@ -40,18 +40,18 @@ const PreviewCard = ({ previewData, metaTags }) => {
   return (
     <div className="bg-gray-800 rounded-lg shadow p-4 sm:p-6 border border-gray-700 mb-6 max-w-full overflow-hidden">
       <h2 className="text-xl font-semibold text-[#FF7B25] mb-4">Social Media Preview</h2>
-      
+
       <div className="mb-6">
         <h3 className="text-lg font-medium text-gray-300 mb-2">How your link will appear when shared:</h3>
         <div className="max-w-lg w-full border border-gray-600 rounded-lg overflow-hidden bg-gray-900">
           {image && (
             <div className="h-48 bg-gray-700 overflow-hidden relative">
-              <img 
-                src={image} 
-                alt="Preview" 
+              <img
+                src={image}
+                alt="Preview"
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  e.target.onerror = null; 
+                  e.target.onerror = null;
                   e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2NjYyI+Tm8gSW1hZ2UgQXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
                 }}
               />
@@ -65,7 +65,7 @@ const PreviewCard = ({ previewData, metaTags }) => {
             <div className="flex items-center">
               <div className="w-6 h-6 rounded-full bg-[#FF7B25] flex items-center justify-center mr-2">
                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z" />
                 </svg>
               </div>
               <span className="text-xs text-gray-400 truncate">via YourSite</span>
@@ -82,7 +82,7 @@ const PreviewCard = ({ previewData, metaTags }) => {
               {Object.entries(og).map(([key, value]) => (
                 <li key={key} className="flex items-start min-w-0">
                   <span className="text-gray-400 font-medium text-sm w-28 flex-shrink-0 truncate">{key}:</span>
-                  <span 
+                  <span
                     className={`text-sm break-words min-w-0 ${value ? 'text-gray-300' : 'text-gray-500 italic'}`}
                     title={value}
                   >
@@ -95,25 +95,26 @@ const PreviewCard = ({ previewData, metaTags }) => {
         </div>
         <div>
           <h3 className="text-lg font-medium text-gray-300 mb-2">Twitter Card Data</h3>
-          <div className="bg-gray-700 rounded-lg p-4 max-w-full overflow-hidden">
+          <div className="bg-gray-700 rounded-lg p-4 w-full overflow-x-auto">
             {twitterTags.length > 0 ? (
-              <ul className="space-y-2">
+              <div className="space-y-3">
                 {twitterTags.map((tag, index) => (
-                  <li key={index} className="flex min-w-0 whitespace-normal">
-                    <span className="text-gray-400 font-medium w-40 flex-shrink-0 truncate whitespace-normal">
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
+                    <div className="text-gray-400 font-medium w-full sm:w-40 break-words">
                       {tag.property || tag.name}:
-                    </span>
-                    <span className="text-gray-300 flex-1 break-words">
+                    </div>
+                    <div className="text-gray-300 flex-1 break-words">
                       {tag.content}
-                    </span>
-                  </li>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className="text-gray-500 italic">No Twitter card tags found</p>
             )}
           </div>
         </div>
+
       </div>
 
       {(previewData?.warnings?.length > 0 || previewData?.notices?.length > 0) && (
@@ -159,28 +160,28 @@ function Result({ seoAnalyzerResult }) {
 
         <div className="space-y-6">
           {seoAnalyzerResult.current_data?.preview_data && (
-            <PreviewCard 
-              previewData={seoAnalyzerResult.current_data.preview_data} 
-              metaTags={seoAnalyzerResult.current_data?.meta_tags} 
+            <PreviewCard
+              previewData={seoAnalyzerResult.current_data.preview_data}
+              metaTags={seoAnalyzerResult.current_data?.meta_tags}
             />
           )}
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            <MetaTagCard 
-              title="Standard Tags" 
-              tags={seoAnalyzerResult.current_data?.meta_tags?.standard || []} 
+            <MetaTagCard
+              title="Standard Tags"
+              tags={seoAnalyzerResult.current_data?.meta_tags?.standard || []}
             />
-            <MetaTagCard 
-              title="OpenGraph Tags" 
-              tags={seoAnalyzerResult.current_data?.meta_tags?.opengraph || []} 
+            <MetaTagCard
+              title="OpenGraph Tags"
+              tags={seoAnalyzerResult.current_data?.meta_tags?.opengraph || []}
             />
-            <MetaTagCard 
-              title="Twitter Tags" 
-              tags={seoAnalyzerResult.current_data?.meta_tags?.twitter || []} 
+            <MetaTagCard
+              title="Twitter Tags"
+              tags={seoAnalyzerResult.current_data?.meta_tags?.twitter || []}
             />
-            <MetaTagCard 
-              title="Other Tags" 
-              tags={seoAnalyzerResult.current_data?.meta_tags?.other || []} 
+            <MetaTagCard
+              title="Other Tags"
+              tags={seoAnalyzerResult.current_data?.meta_tags?.other || []}
             />
           </div>
 
@@ -195,13 +196,12 @@ function Result({ seoAnalyzerResult }) {
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2.5">
                 <div
-                  className={`h-2.5 rounded-full ${
-                    (seoAnalyzerResult.analysis?.performance_score || 0) >= 70
+                  className={`h-2.5 rounded-full ${(seoAnalyzerResult.analysis?.performance_score || 0) >= 70
                       ? 'bg-green-500'
                       : (seoAnalyzerResult.analysis?.performance_score || 0) >= 40
-                      ? 'bg-yellow-500'
-                      : 'bg-red-500'
-                  }`}
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
+                    }`}
                   style={{ width: `${seoAnalyzerResult.analysis?.performance_score || 0}%` }}
                 ></div>
               </div>
